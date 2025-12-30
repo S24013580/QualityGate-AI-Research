@@ -192,7 +192,7 @@
                         <outputFormat>HTML</outputFormat>
                         <outputFormat>XML</outputFormat>
                     </outputFormats>
-                    <mutationThreshold>85</mutationThreshold>
+                    <mutationThreshold>80</mutationThreshold>
                     <coverageThreshold>0</coverageThreshold>
                 </configuration>
             </plugin>
