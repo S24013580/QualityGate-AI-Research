@@ -29,17 +29,21 @@ jobs:
     - name: Compile
       run: mvn clean compile
     
-    - name: Run tests
-      run: mvn test
+    - name: Run tests with coverage
+      run: mvn clean test jacoco:report
     
-    - name: Generate coverage report
-      run: mvn jacoco:report
+    - name: Enforce coverage thresholds
+      run: mvn jacoco:check
+      continue-on-error: false
+      env:
+        MAVEN_OPTS: -Xmx2048m
     
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
       with:
         name: coverage-reports
         path: target/site/jacoco/
+      if: always()
     
     - name: Run mutation testing
       run: mvn org.pitest:pitest-maven:mutationCoverage

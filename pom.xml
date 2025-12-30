@@ -111,6 +111,7 @@
                     </execution>
                     <execution>
                         <id>check</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
@@ -118,6 +119,9 @@
                             <rules>
                                 <rule>
                                     <element>PACKAGE</element>
+                                    <includes>
+                                        <include>com.qualitygate.research.*</include>
+                                    </includes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -128,6 +132,21 @@
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>0.90</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.95</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -149,10 +168,10 @@
                 </dependencies>
                 <configuration>
                     <targetClasses>
-                        <param>com.qualitygate.research.service.*</param>
+                        <param>com.qualitygate.research.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>com.qualitygate.research.service.*</param>
+                        <param>com.qualitygate.research.*</param>
                     </targetTests>
                     <outputFormats>
                         <outputFormat>HTML</outputFormat>
