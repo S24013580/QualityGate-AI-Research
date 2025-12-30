@@ -33,7 +33,7 @@ jobs:
       run: mvn clean test jacoco:report
     
     - name: Enforce coverage thresholds
-      run: mvn jacoco:check
+      run: mvn verify
       continue-on-error: false
       env:
         MAVEN_OPTS: -Xmx2048m
