@@ -179,6 +179,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    permissions:
+      contents: read
+      packages: write
     
     steps:
     - uses: actions/checkout@v4
@@ -206,8 +209,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        mkdir -p ${{ github.workspace }}/.m2
-        cat > ${{ github.workspace }}/.m2/settings.xml <<EOF
+        mkdir -p ~/.m2
+        cat > ~/.m2/settings.xml <<EOF
         <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
