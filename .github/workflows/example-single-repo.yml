@@ -1,0 +1,76 @@
+name: Example: Single Repository Approach
+
+# This is an EXAMPLE workflow if both projects are in ONE repository
+# Use this if you want to keep both projects together
+
+on:
+  workflow_dispatch:  # Manual trigger only (example)
+
+jobs:
+  generate-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # If both projects are in one repo with structure:
+    # repo/
+    #   ├── tool/          (QualityGate-AI tool)
+    #   └── research/      (Research Java project)
+    
+    - name: Set up Java 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: 'maven'
+        cache-dependency-path: research/pom.xml
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+        cache-dependency-path: tool/requirements.txt
+    
+    - name: Install Python dependencies
+      working-directory: tool
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Install Ollama
+      run: |
+        curl -fsSL https://ollama.ai/install.sh | sh
+        ollama pull codellama
+    
+    - name: Start Ollama service
+      run: |
+        ollama serve &
+        sleep 10
+        ollama list
+    
+    - name: Generate tests for UserService
+      working-directory: tool
+      run: |
+        python -m src.cli generate \
+          --module ${{ github.workspace }}/research/src/main/java/com/qualitygate/research/service/UserService.java \
+          --output ${{ github.workspace }}/research/src/test/java/com/qualitygate/research/service \
+          --protocol standard
+    
+    - name: Generate tests for OrderService
+      working-directory: tool
+      run: |
+        python -m src.cli generate \
+          --module ${{ github.workspace }}/research/src/main/java/com/qualitygate/research/service/OrderService.java \
+          --output ${{ github.workspace }}/research/src/test/java/com/qualitygate/research/service \
+          --protocol expert
+    
+    - name: Compile and test
+      working-directory: research
+      run: |
+        mvn clean test
+        mvn jacoco:report
+        mvn org.pitest:pitest-maven:mutationCoverage
+
