@@ -202,13 +202,7 @@ jobs:
         name: application-jar
         path: target/
     
-    - name: Publish to GitHub Packages
-      uses: actions/setup-java@v4
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        server-id: github
-        settings-path: ${{ github.workspace }}
+    - name: Configure Maven for GitHub Packages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
@@ -227,6 +221,11 @@ jobs:
           </servers>
         </settings>
         EOF
+    
+    - name: Publish to GitHub Packages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
         mvn deploy -DskipTests \
           -DaltDeploymentRepository=github::https://maven.pkg.github.com/${{ github.repository }}
     
