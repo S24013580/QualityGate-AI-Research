@@ -10,6 +10,14 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/S24013580/QualityGate-AI-Research</url>
+        </repository>
+    </distributionManagement>
+
     <name>QualityGate Research Project</name>
     <description>Research project for evaluating AI-generated unit tests - Service Layer Focus</description>
 

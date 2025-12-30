@@ -226,8 +226,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        mvn deploy -DskipTests \
-          -DaltDeploymentRepository=github::https://maven.pkg.github.com/${{ github.repository }}
+        mvn deploy -DskipTests
+      continue-on-error: false
     
     - name: Set up Docker Buildx
       if: env.DOCKER_HUB_USERNAME != ''
